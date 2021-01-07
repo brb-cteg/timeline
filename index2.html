@@ -223,7 +223,7 @@
                       console.log(data); 
                     //  $("#lat_value").val(my_Point.lat());  // เอาค่า latitude ตัว marker แสดงใน textbox id=lat_value
                     //  $("#lon_value").val(my_Point.lng());
-                      $.post( "https://entech.boonrawd.co.th/callbackline3", data, function( data ) {
+                      $.post( "https://entech.boonrawd.co.th/inputtimeline", data, function( data ) {
                       console.log(data);
                       confirm(data)
                       }, "json");
