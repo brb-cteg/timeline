@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>SMARTCHECKIN | EIT</title>
+    <link rel="stylesheet" href="css/style.css" media="all">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false">
+    </script>
+    <script>
+        var map;
+        var myCenter = new google.maps.LatLng(51.508742, -0.120850);
+
+        function initialize() {
+            var mapProp = {
+                center: myCenter,
+                zoom: 5,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+            google.maps.event.addListener(map, 'click', function(event) {
+                placeMarker(event.latLng);
+            });
+        }
+
+        function placeMarker(location) {
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+            });
+            var infowindow = new google.maps.InfoWindow({
+                content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
+            });
+            infowindow.open(map, marker);
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+</head>
+
+<body>
+    <img id="pictureUrl">
+    <center>
+        <p id="displayName"><b></b> </p>
+    </center>
+    <div id="googleMap" style="width:500px;height:380px;"></div>
+
+    <div class="container mt-3">
+
+        <form>
+            <div class="card-header" style="padding-bottom: 0%;color: #fff;background-color: #007bff;border-color: #007bff;font-weight: 400">
+                <label class="card-title">บันทึกชีวิตประจำวัน</label>
+            </div>
+            <label for="exampleInputEmail1" style="padding-top: 2%;">วันที่ทำกิจกรรม</label>
+            <input type="datetime-local" class="form-control" data-date-language="th" id="dateTimes" name="dateTimes">
+            <label style="padding-top: 2%;">กิจกรรม</label>
+            <select name="cars" class="custom-select mb-3" id="activity" name="activity">
+                <option selected>เลือกกิจกรรม</option>
+                <option >ซื้ออาหาร</option>
+                <option >หาหมอ</option>
+                <option >นั่งร้าน</option>
+              </select>
+            <label style="padding-top: 2%;">เวลาที่ทำกิจกรรม(Hr)</label>
+            <input type="number" class="form-control" id="pointstime" name="pointstime" step="0.5" style="width: 20%;">
+            <label style="padding-top: 2%;">พบปะใคร</label>
+            <textarea type="" class="form-control" id="meeting" name="meeting" rows="3"></textarea>
+            <label style="padding-top: 2%;">พาหนะ</label>
+            <select name="cars" class="custom-select mb-3" id="vehicle" name="vehicle">
+                <option selected>เลือกพาหนะ</option>
+                <option >รถสาธารณะ</option>
+                <option >MRT</option>
+                <option >BTS</option>
+                <option >วินมอไซด์</option>
+                <option >แท็กซี่</option>
+                <option >รถยนต์ส่วนตัว</option>
+                <option >มอไซด์ส่วนตัว</option>
+              </select>
+            <button type="submit" class="btn btn-primary" onclick="sendMsg()">บันทึก</button>
+        </form>
+    </div>
+
+    <p id="os" style="display: none;"><b>OS:</b> </p>
+    <p id="language" style="display: none;"><b>Language:</b> </p>
+    <p id="version" style="display: none;"><b>Version:</b> </p>
+    <p id="isInClient" style="display: none;"><b>isInClient:</b> </p>
+    <p id="accessToken" style="display: none;"><b>AccessToken:</b> </p>
+    <img id="pictureUrl" style="display: none;">
+    <p id="userId" style="display: none;"><b>userId:</b> </p>
+    <p id="displayName" style="display: none;"><b>displayName:</b> </p>
+    <p id="statusMessage" style="display: none;"><b>statusMessage:</b> </p>
+    <p id="decodedIDToken" style="display: none;"><b>email:</b> </p>
+    <p id="type" style="display: none;"><b>type:</b> </p>
+    <p id="viewType" style="display: none;"><b>viewType:</b> </p>
+    <p id="utouId" style="display: none;"><b>utouId:</b> </p>
+    <p id="roomId" style="display: none;"><b>roomId:</b> </p>
+    <p id="groupId" style="display: none;"><b>groupId:</b> </p>
+    <p id="friendship" style="display: none;"><b>isFriendship:</b> </p>
+    <p id="scanCode" style="display: none;"><b>Code:</b> </p>
+    <p id="isLoggedIn" style="display: none;"><b>isLoggedIn:</b> </p>
+    <p id="universalLink1" style="display: none;"><b>Universal Link:</b> </p>
+    <p id="universalLink2" style="display: none;"><b>Universal Link with Query params:</b> </p>
+    <p style="display: none;"><a href="liff/path/?param=9">Link to Path</a></p>
+
+    <button id="btnMsg" onclick="sendMsg()" style="display: none;">Send Message</button>
+    <button id="btnShare" onclick="shareMsg()" style="display: none;">Share Target Picker</button>
+    <button onclick="openWindow()" style="display: none;">Open Window</button>
+    <button id="btnScanCode" onclick="scanCode()" style="display: none;">Scan Code</button>
+    <button id="btnLogOut" onclick="logOut()" style="display: none;">Log Out</button>
+    <button id="btnClose" onclick="closed()" style="display: none;">Close</button>
+
+    <script src="js/vconsole.min.js"></script>
+    <!-- <script>
+    var vConsole = new VConsole()
+    console.log("Hello World!")
+  </script> -->
+
+    <script src="https://static.line-scdn.net/liff/edge/versions/2.6.0/sdk.js"></script>
+    <script>
+        function createUniversalLink() {}
+
+        async function shareMsg() {}
+
+        function logOut() {}
+
+        function closed() {}
+
+        async function scanCode() {}
+
+        function openWindow() {}
+
+        async function getFriendship() {}
+
+        async function sendMsg() {
+            // alert("messages")
+            //       if (liff.getContext().type !== "none" && liff.getContext().type !== "external") {
+            // // Send messages here.
+            //         }
+            swal("สำเร้จ!", "success", "success");
+            console.log($("#dateTimes").val())
+            console.log($("#activity").val())
+            console.log($("#pointstime").val())
+            console.log($("#meeting").val())
+            console.log($("#vehicle").val())
+
+
+            // if (liff.getContext().type !== "none") {
+            //     await liff.sendMessages([{
+            //         "type": "sticker",
+            //         "stickerId": 1,
+            //         "packageId": 1
+            //     }, ])
+
+            //     swal("สำเร้จ!", "success", "success");
+            // }
+        }
+
+
+
+        function getContext() {
+            document.getElementById("type").append(liff.getContext().type)
+            document.getElementById("viewType").append(liff.getContext().viewType)
+            document.getElementById("utouId").append(liff.getContext().utouId)
+            document.getElementById("roomId").append(liff.getContext().roomId)
+            document.getElementById("groupId").append(liff.getContext().groupId)
+        }
+
+        async function getUserProfile() {
+            const profile = await liff.getProfile()
+            document.getElementById("pictureUrl").src = profile.pictureUrl
+            document.getElementById("userId").append(profile.userId)
+            document.getElementById("statusMessage").append(profile.statusMessage)
+            document.getElementById("displayName").append(profile.displayName)
+
+        }
+
+        function getEnvironment() {
+            document.getElementById("os").append(liff.getOS())
+            document.getElementById("language").append(liff.getLanguage())
+            document.getElementById("version").append(liff.getVersion())
+            document.getElementById("accessToken").append(liff.getAccessToken()) // ความปลอดภัย
+            document.getElementById("isInClient").append(liff.isInClient()) //ซ่อน app line หรือ app browser
+            if (liff.isInClient()) {
+                document.getElementById("btnLogOut").style.display = "none"
+
+            } else {
+                document.getElementById("btnMsg").style.display = "none"
+                document.getElementById("btnScanCode").style.display = "none"
+                document.getElementById("btnClose").style.display = "none"
+            }
+        }
+
+        async function main() {
+            // alert("LINE Developers x Skooldio")
+            await liff.init({
+                liffId: "1655548685-52zM1yX7"
+            })
+            getEnvironment()
+            getUserProfile()
+            getContext()
+
+            // getFriendship()
+            // createUniversalLink()
+        }
+        main()
+    </script>
+</body>
+
+</html>
