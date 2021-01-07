@@ -1,1 +1,255 @@
 
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.13.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.13.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.13.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.13.1/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.13.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+    
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style type="text/css">
+    html { height: 100% }
+    body { 
+        height:100%;
+        margin:0;padding:0;
+        font-family:tahoma, "Microsoft Sans Serif", sans-serif, Verdana;
+        font-size:12px;
+    }
+    /* css กำหนดความกว้าง ความสูงของแผนที่ */
+    #map_canvas { 
+        width:100%;
+        height:300px;
+       
+    /*  margin-top:100px;*/
+    }
+    </style>
+      <style>
+          #pictureUrl { display: block; margin: 0 auto }
+        </style>
+  </head>
+  <body>
+      <div align="right"> 
+          <a  href="https://time.is/Bangkok" id="time_is_link" rel="nofollow" style="font-size:20px"></a>
+            <span id="Bangkok_z40a" style="font-size:20px"></span>
+            <script src="//widget.time.is/t.js"></script>
+            <script>
+            time_is_widget.init({Bangkok_z40a:{}});
+            </script>
+        </div>
+    <div align="center">
+      <img id="pictureUrl" style="width:80px; border-radius:60px;">
+      <p hidden id="userId"></p>
+      <p hidden id="userId2"></p>
+      <p id="displayName" style="font-size: 15px;" ></p>
+    </div>
+    
+<script>
+//var d = new Date();
+
+//document.getElementById("date").innerHTML = d.format("dd/MM/yyyy hh:mm TT");
+</script>
+      
+      <!-- <p id="statusMessage"></p> -->
+      <!--  <p id="getDecodedIDToken"></p>-->
+      <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+      <script>
+        function runApp() {
+          liff.getProfile().then(profile => {
+            document.getElementById("pictureUrl").src = profile.pictureUrl;
+            document.getElementById("userId").innerHTML = '<b>UserId:</b> ' + profile.userId;
+            document.getElementById("userId2").innerHTML = profile.userId;
+            document.getElementById("displayName").innerHTML =  profile.displayName;
+           
+          }).catch(err => console.error(err));
+        }
+        liff.init({ liffId: "1654007561-8ZJN4wAj" }, () => {
+          if (liff.isLoggedIn()) {
+            runApp()
+          } else {
+            liff.login();
+          }
+        }).then(() => {
+            // start to use LIFF's api
+            initializeApp();
+        })
+        .catch((err) => {
+            // document.getElementById("liffAppContent").classList.add('hidden');
+            // document.getElementById("liffInitErrorMessage").classList.remove('hidden');
+        });
+       
+      </script>
+
+          
+      
+<div align="center" id="test1" style="display:show" > 
+      
+      
+    
+      <div align="center" id="map_canvas"></div>
+      
+       <div align="center" id="showDD" >
+       <input type="hidden" name="lat_value" id="lat_value" value=""><br>
+       <input type="hidden" name="lon_value" id="lon_value" value=""><br>
+       <input type="hidden" name="userId2" id="userId2" value="">
+       <button type="button" class="btn btn-primary" id="btnGetLocation" name="btnGetLocation">Send My Location</button>
+      </div> 
+         
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>    
+      <script type="text/javascript">
+      var map; // กำหนดตัวแปร map ไว้ด้านนอกฟังก์ชัน เพื่อให้สามารถเรียกใช้งาน จากส่วนอื่นได้
+      var GGM; // กำหนดตัวแปร GGM ไว้เก็บ google.maps Object จะได้เรียกใช้งานได้ง่ายขึ้น
+      
+      function initialize() { // ฟังก์ชันแสดงแผนที่
+          GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
+          // กำหนดจุดเริ่มต้นของแผนที่
+          var my_Latlng  = new GGM.LatLng(13.761728449950002,100.6527900695800);
+          var my_mapTypeId=GGM.MapTypeId.ROADMAP; // กำหนดรูปแบบแผนที่ที่แสดง
+          // กำหนด DOM object ที่จะเอาแผนที่ไปแสดง ที่นี้คือ div id=map_canvas
+          var my_DivObj=$("#map_canvas")[0]; 
+          // กำหนด Option ของแผนที่
+          var myOptions = {
+              zoom: 13, // กำหนดขนาดการ zoom
+              center: my_Latlng , // กำหนดจุดกึ่งกลาง
+              mapTypeId:my_mapTypeId // กำหนดรูปแบบแผนที่
+          };
+          map = new GGM.Map(my_DivObj,myOptions);// สร้างแผนที่และเก็บตัวแปรไว้ในชื่อ map
+       
+       
+       
+          // เรียกใช้คุณสมบัติ ระบุตำแหน่ง ของ html 5 ถ้ามี
+          if(navigator.geolocation){
+                  navigator.geolocation.getCurrentPosition(function(position){
+                      var pos = new GGM.LatLng(position.coords.latitude,position.coords.longitude);
+                      var infowindow = new GGM.InfoWindow({
+                          map: map,
+                          position: pos,
+                          content: 'คุณอยู่ที่นี่.'
+                      });
+                       
+                      var my_Point = infowindow.getPosition();  // หาตำแหน่งของตัว marker เมื่อกดลากแล้วปล่อย
+                      map.panTo(my_Point);  // ให้แผนที่แสดงไปที่ตัว marker       
+                      $("#lat_value").val(my_Point.lat());  // เอาค่า latitude ตัว marker แสดงใน textbox id=lat_value
+                      $("#lon_value").val(my_Point.lng()); // เอาค่า longitude ตัว marker แสดงใน textbox id=lon_value 
+                      $("#zoom_value").val(map.getZoom()); // เอาขนาด zoom ของแผนที่แสดงใน textbox id=zoom_value              
+                      map.setCenter(pos);
+                  },function() {
+                      // คำสั่งทำงาน ถ้า ระบบระบุตำแหน่ง geolocation ผิดพลาด หรือไม่ทำงาน
+                  });
+          }else{
+               // คำสั่งทำงาน ถ้า บราวเซอร์ ไม่สนับสนุน ระบุตำแหน่ง
+          }
+         
+          // กำหนด event ให้กับตัวแผนที่ เมื่อมีการเปลี่ยนแปลงการ zoom
+          GGM.event.addListener(map, 'zoom_changed', function() {
+              $("#zoom_value").val(map.getZoom()); // เอาขนาด zoom ของแผนที่แสดงใน textbox id=zoom_value  
+          });
+       
+      }
+      $(function(){
+          // โหลด สคริป google map api เมื่อเว็บโหลดเรียบร้อยแล้ว
+          // ค่าตัวแปร ที่ส่งไปในไฟล์ google map api
+          // v=3.2&sensor=false&language=th&callback=initialize
+          //  v เวอร์ชัน่ 3.2
+          //  sensor กำหนดให้สามารถแสดงตำแหน่งทำเปิดแผนที่อยู่ได้ เหมาะสำหรับมือถือ ปกติใช้ false
+          //  language ภาษา th ,en เป็นต้น
+          //  callback ให้เรียกใช้ฟังก์ชันแสดง แผนที่ initialize
+          $("<script/>", {
+            "type": "text/javascript",
+            src: "//maps.google.com/maps/api/js?v=3.2&sensor=false&language=th&callback=initialize"
+          }).appendTo("body");    
+      });
+      </script>  
+      
+      <br/> <br />
+      <div id="location"></div>
+      
+      
+      <script type="text/javascript">
+      
+        function getLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+          } else { 
+            $('#location').html("Geolocation is not supported by this browser.");
+          }
+        }
+      
+        function showPosition(position) {
+          var location = "Latitude: " + position.coords.latitude +  "<br>Longitude: " + position.coords.longitude;
+              lat = position.coords.latitude;
+              long = position.coords.longitude;
+              $('#location').html(location);
+
+        }
+      
+        $(document).ready(function() {
+          var lat;
+          var long;
+          //runApp()
+         // const data2 = {userID:$("#userId").text()}
+         //$.post( "https://entech.boonrawd.co.th/callbackline2", data2, function( data2 ) {
+            //          console.log(data2); 
+            //          }, "json");
+          $("#btnGetLocation").on("click",function() {	
+                      getLocation();
+                      const data={userID:$("#userId2").text(),lat: $("#lat_value").val(),long:$("#lon_value").val()}
+                      console.log(data); 
+                    //  $("#lat_value").val(my_Point.lat());  // เอาค่า latitude ตัว marker แสดงใน textbox id=lat_value
+                    //  $("#lon_value").val(my_Point.lng());
+                      $.post( "https://entech.boonrawd.co.th/callbackline3", data, function( data ) {
+                      console.log(data);
+                      confirm(data)
+                      }, "json");
+                      confirm("คุณได้ Check-IN เวลาเรียบร้อยแล้ว");
+                      //runApp()
+                     
+                       liff.closeWindow();
+      
+      //const Http = new XMLHttpRequest();
+      //const url='https://entech.boonrawd.co.th/callbackline2';
+      //const data={aa:'1',bb:'22'}
+      //Http.setRequestHeader("Content-Type", "application/json");
+      //Http.open("POST",url);
+      //Http.send(data);
+      
+      //Http.onreadystatechange = (e) => {
+        //console.log(Http.responseText,data)
+      //}
+      
+          });
+      
+        });
+      </script>
+  </div>
+  <div align="center" id="test2" style="display:none" > 
+    <p>LogIn show</p>
+  </div>
+  </body>
+</html>
